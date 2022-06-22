@@ -2,7 +2,7 @@
   <br>
   <a><img src="https://ddragon.leagueoflegends.com/cdn/img/champion/centered/Velkoz_11.jpg" alt="LoL-Utils - Utilitaire LoL"></a>
   <br>
-  Mythic Discord Bot
+  LoL-Utils Un utilitaire LoL
   <br>
 </h1>
 
@@ -22,6 +22,7 @@
 
 # Aperçu
 
-Mythic est un bot complet avec plus d'une centaine de commandes. Il est surtout axé sur le
-gaming notamment sur le jeu League Of Legends, il supporte aussi une vingtaine d'API
-proposant ainsi une variété de possibilitées. 
+LoL-Utils est un petit outil complet pour simplifier la sélection en centralisant un
+maximum d'éléments dans un seul programme compacte et peu gourmand en ressources. Il
+a ainsi pour objectif de rendre la sélection des champions de League Of Legends plus
+simple, plus rapide et plus efficace.
