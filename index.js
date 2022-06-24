@@ -1,3 +1,4 @@
+//Librairies
 const axios = require('axios');
 const { load } = require('cheerio');
 const col = require('cli-color');
@@ -7,30 +8,32 @@ const inp = require('readline').createInterface({
     output: process.stdout
 });
 
-console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles'));
+//Debut du programme
+console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
 redemarrer();
 
-
+//Fonction principale
 function redemarrer() {
     inp.question('>> ', name => {
-        let content = name.split(' ');
-        let cmd = content[0];
-        let arg = name.slice(6).toLowerCase().replace(' ', '-');
+        let args = name.toLowerCase().split(' ');
+        let cmd = args[0];
+        let arg = args[1];
+        let lane = args[2];
         switch (cmd) {
             case 'count':
-                contre(arg);
+                contre(arg, lane);
                 break;
             case 'help':
-                help();
+                help(arg);
                 break;
             case 'runes':
-                runes(arg);
+                runes(arg, lane);
                 break;
             case 'match':
-                matchup(arg);
+                matchup(arg, lane);
                 break;
             case 'start':
-                start(arg);
+                start(arg, lane);
                 break;
             case 'champ':
                 champion(arg);
@@ -39,80 +42,141 @@ function redemarrer() {
     });
 }
 
-
-async function contre(arg) {
+//Commandes disponibles
+async function contre(arg, lane) {
     axios.get(`https://www.counterstats.net/league-of-legends/${arg}`)
         .then(res => {
-            let imag;
             let nam;
-            let wr;
-            let stre;
             let tabb;
             let html = res.data;
             const $ = load(html);
             if (!$('.b')[0]) {
                 console.log(col.red.bold('Champion non reconnu'))
             } else {
-                console.log(col.underline.bold(`Counter de ${caps(arg)} | WR | Force`))
-                let i = 14;
-                let x = 0;
-                while (i <= 24) {
-                    imag = $('img')[i].attribs.src;
-                    nam = imag.slice(48, -8)
-                    wr = $('.b')[x].children[0].data;
-                    stre = $('.rating-bar').find('label')[x].children[0].data.slice(0, -1);
+                let i = 0;
+                let ru = [];
+                let wr = [];
+                let pt = [];
+                $('img').each(function (i, element) {
+                    if ($(element).attr('alt') == "Counter Stats for " && $(element).parent().parent().parent().parent().parent().parent().children().first().text().includes(ligne(lane))) {
+                        ru.push($(element).attr('src'));
+                        wr.push($(element).parent().parent().next().next().children().text())
+                        pt.push($(element).parent().parent().next().children().next().find('label').text())
+                    }
+                })
+                if (!ru[i]) {
+                    console.log(col.red.bold('Champion non reconnu'));
+                    return;
+                } else {
+                    console.log(col.underline.bold(`Counter ${caps(arg)} ${ligne(lane)} | WR | Force`))
+                }
+                while (i <= 14) {
+                    nam = ru[i].slice(48, -8);
                     if (nam.length >= 7) {
                         tabb = ' \t';
                     } else {
                         tabb = ' \t\t';
                     }
-                    console.log(col.bold(caps(nam) + tabb + wr + ' \t' + stre + '/10'))
+                    console.log(col.bold(caps(nam) + tabb + wr[i] + ' \t' + pt[i].slice(0, -1) + '/10'))
                     i++
-                    x++
                 }
             }
         })
     await delay(1500);
     redemarrer();
 }
-async function help() {
-    console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>: renvois cette page\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<start>: renvois le build de début du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion'));
+async function help(arg) {
+    if (!arg) {
+        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<start>: renvois le build de début du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
+    } else {
+        switch (arg) {
+            case 'count':
+                console.log(col.bold(col.underline('Commande Counter:') + '\nSyntaxe: count <champion> <lane>\nRenvois les counters du champion\nLanes: top, jgl, mid, adc, sup'));
+                break;
+            case 'help':
+                console.log(col.bold(col.underline('Commande Help:') + '\nSyntaxe: help [commande]\nRenvois les différentes commandes'));
+                break;
+            case 'runes':
+                console.log(col.bold(col.underline('Commande Runes:') + '\nSyntaxe: runes <champion> <lane>\nRenvois les runes du champion\nLanes: top, jgl, mid, adc, sup'));  //---------------
+                break;
+            case 'match':
+                console.log(col.bold(col.underline('Commande Match:') + '\nSyntaxe: match <champion> <opposant>\nRenvois les stats du matchup'));                               //-----------
+                break;
+            case 'start':
+                console.log(col.bold(col.underline('Commande Start:') + '\nSyntaxe: start <champion> <lane>\nRenvois le build de début du champion\nLanes: top, jgl, mid, adc, sup'));  //----------
+                break;
+            case 'champ':
+                console.log(col.bold(col.underline('Commande Champ:') + '\nSyntaxe: champ <champion>\nRenvois les infos du champion'));                                         //-------------
+                break;
+        }
+    }
     await delay(1000);
     redemarrer();
 }
-async function runes(arg) {
-    var url = `https://rankedboost.com/league-of-legends/build/${arg}/`
+async function runes(arg, lane) {
+    var url = `https://www.op.gg/champions/${arg}/${ligneop(lane)}/build?hl=fr_FR`
     axios.get(url)
         .then(res => {
             let html = res.data;
             const $ = load(html);
             let ru = [];
-            $('.rb-build-rune-text').each(function (index, element) {
-                ru.push($(element).text());
+            let tu = [];
+            let adap = [];
+            let runes1 = $('.css-1a27uut.e1jxk9el2').children().next();
+            let runes2 = runes1.next().next();
+            let runes3 = runes1.last().children().next();
+            $('img').each(function (index, element) {
+                if (!$(element).parent().parent().attr('class')) return;
+                if ($(element).parent().parent().attr('class').includes('e1o8f101') && !$(element).parent().parent().attr('class').includes('css-6l0g7v')) {
+                    tu.push($(element).attr('alt'));
+                }
             })
+            runes3.find('img').each(function (index, element) {
+                if ($(element).attr('class').includes('css-anaetp')) {
+                    if ($(element).attr('src').includes('5008')) {
+                        adap.push("Force adaptative");
+                    } else if ($(element).attr('src').includes('5005')) {
+                        adap.push("Vitesse d\'attaque");
+                    } else if ($(element).attr('src').includes('5007')) {
+                        adap.push("Accélération de compétences");
+                    } else if ($(element).attr('src').includes('5002')) {
+                        adap.push("Armure");
+                    } else if ($(element).attr('src').includes('5003')) {
+                        adap.push("Résistance magique");
+                    } else {
+                        adap.push("Vie selon le niveau");
+                    }
+                }
+            })
+            ru[0] = runes1.children().next().next().children().children().children().attr('alt');
+            ru[5] = runes2.children().next().children().children().children().attr('alt');
+            if(!ru[0]){
+                console.log(col.red.bold('Champion non reconnu'));
+                redemarrer();
+            }
             const data = [
-                [ru[0], ru[5], ru[8]],
-                [ru[1], ru[6], ru[9]],
-                [ru[2], ru[7], ru[10]],
-                [ru[3], 'Nothing', 'Nothing'],
-                [ru[4], 'Nothing', 'Nothing']
+                [ru[0], ru[5], adap[0]],
+                [tu[0], tu[4], adap[1]],
+                [tu[1], tu[5], adap[2]],
+                [tu[2], 'Rien', 'Rien'],
+                [tu[3], 'Rien', 'Rien']
             ];
-            console.log(col.bold.underline(`Runes pour ${caps(arg)}`))
+            console.log(col.bold.underline(`Runes pour ${caps(arg)} ${ligne(lane)}`))
             console.log(table(data));
         })
         .catch(err => {
-            console.log(col.red.bold('Champion non reconnu'))  
+            console.log(col.red.bold('Champion non reconnu'))
         })
-    await delay(1500);
+    await delay(3000);
     redemarrer();
 }
-async function matchup() {
+async function matchup(arg, oppos) {
     console.log('help')
 }
-async function start() {
+async function start(arg, lane) {
     console.log('help')
 }
-async function champion() {
+async function champion(arg) {
     console.log('help')
 }
 
@@ -122,4 +186,44 @@ function delay(time) {
 
 function caps(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function ligne(lane) {
+    switch (lane) {
+        case 'sup':
+            return 'Support'
+            break;
+        case 'top':
+            return 'Top'
+            break;
+        case 'adc':
+            return 'Bottom'
+            break;
+        case 'mid':
+            return 'Middle'
+            break;
+        case 'jgl':
+            return 'Jungle'
+            break;
+    }
+}
+
+function ligneop(lane) {
+    switch (lane) {
+        case 'sup':
+            return 'support'
+            break;
+        case 'top':
+            return 'top'
+            break;
+        case 'adc':
+            return 'adc'
+            break;
+        case 'mid':
+            return 'mid'
+            break;
+        case 'jgl':
+            return 'jungle'
+            break;
+    }
 }
