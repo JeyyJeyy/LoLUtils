@@ -2,6 +2,7 @@
 const axios = require('axios');
 const { load } = require('cheerio');
 const col = require('cli-color');
+const clear = require('console-cls')
 const { table } = require('table');
 const inp = require('readline').createInterface({
     input: process.stdin,
@@ -9,6 +10,7 @@ const inp = require('readline').createInterface({
 });
 
 //Debut du programme
+clear();
 console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
 redemarrer();
 
@@ -37,6 +39,11 @@ function redemarrer() {
                 break;
             case 'champ':
                 champion(arg);
+                break;
+            case 'clear':
+                clear();
+                console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
+                redemarrer();
                 break;
         }
     });
@@ -87,7 +94,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<start>: renvois le build de début du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
+        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<clear>: effacer la console\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<start>: renvois le build de début du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
     } else {
         switch (arg) {
             case 'count':
@@ -107,6 +114,9 @@ async function help(arg) {
                 break;
             case 'champ':
                 console.log(col.bold(col.underline('Commande Champ:') + '\nSyntaxe: champ <champion>\nRenvois les infos du champion'));                                         //-------------
+                break;
+            case 'clear':
+                console.log(col.bold(col.underline('Commande Clear:') + '\nSyntaxe: clear\nEfface la console'));                                         //-------------
                 break;
         }
     }
@@ -150,19 +160,12 @@ async function runes(arg, lane) {
             })
             ru[0] = runes1.children().next().next().children().children().children().attr('alt');
             ru[5] = runes2.children().next().children().children().children().attr('alt');
-            if(!ru[0]){
+            if (!ru[0]) {
                 console.log(col.red.bold('Champion non reconnu'));
+                return;
                 redemarrer();
             }
-            const data = [
-                [ru[0], ru[5], adap[0]],
-                [tu[0], tu[4], adap[1]],
-                [tu[1], tu[5], adap[2]],
-                [tu[2], 'Rien', 'Rien'],
-                [tu[3], 'Rien', 'Rien']
-            ];
-            console.log(col.bold.underline(`Runes pour ${caps(arg)} ${ligne(lane)}`))
-            console.log(table(data));
+            $
         })
         .catch(err => {
             console.log(col.red.bold('Champion non reconnu'))
