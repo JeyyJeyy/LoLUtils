@@ -2,7 +2,6 @@
 const axios = require('axios');
 const { load } = require('cheerio');
 const col = require('cli-color');
-const clear = require('console-cls')
 const { table } = require('table');
 const inp = require('readline').createInterface({
     input: process.stdin,
@@ -10,7 +9,7 @@ const inp = require('readline').createInterface({
 });
 
 //Debut du programme
-clear();
+console.clear();
 console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
 redemarrer();
 
@@ -34,14 +33,14 @@ function redemarrer() {
             case 'match':
                 matchup(arg, lane);
                 break;
-            case 'start':
-                start(arg, lane);
+            case 'build':
+                build(arg, lane);
                 break;
             case 'champ':
                 champion(arg);
                 break;
             case 'clear':
-                clear();
+                console.clear();
                 console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
                 redemarrer();
                 break;
@@ -53,6 +52,7 @@ function redemarrer() {
 async function contre(arg, lane) {
     axios.get(`https://www.counterstats.net/league-of-legends/${arg}`)
         .then(res => {
+            const data = [];
             let nam;
             let tabb;
             let html = res.data;
@@ -74,19 +74,14 @@ async function contre(arg, lane) {
                 if (!ru[i]) {
                     console.log(col.red.bold('Champion non reconnu'));
                     return;
-                } else {
-                    console.log(col.underline.bold(`Counter ${caps(arg)} ${ligne(lane)} | WR | Force`))
                 }
-                while (i <= 14) {
+                data.push(['Counter', 'WR', 'Score /10'])
+                while (i <= 11) {
                     nam = ru[i].slice(48, -8);
-                    if (nam.length >= 7) {
-                        tabb = ' \t';
-                    } else {
-                        tabb = ' \t\t';
-                    }
-                    console.log(col.bold(caps(nam) + tabb + wr[i] + ' \t' + pt[i].slice(0, -1) + '/10'))
+                    data.push([caps(nam), wr[i], pt[i].slice(0, -1)])
                     i++
                 }
+                console.log(table(data));
             }
         })
     await delay(1500);
@@ -94,7 +89,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<clear>: effacer la console\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<start>: renvois le build de début du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
+        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<clear>: effacer la console\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
     } else {
         switch (arg) {
             case 'count':
@@ -109,8 +104,8 @@ async function help(arg) {
             case 'match':
                 console.log(col.bold(col.underline('Commande Match:') + '\nSyntaxe: match <champion> <opposant>\nRenvois les stats du matchup'));                               //-----------
                 break;
-            case 'start':
-                console.log(col.bold(col.underline('Commande Start:') + '\nSyntaxe: start <champion> <lane>\nRenvois le build de début du champion\nLanes: top, jgl, mid, adc, sup'));  //----------
+            case 'build':
+                console.log(col.bold(col.underline('Commande Build:') + '\nSyntaxe: build <champion> <lane>\nRenvois le build de la game du champion\nLanes: top, jgl, mid, adc, sup'));  //----------
                 break;
             case 'champ':
                 console.log(col.bold(col.underline('Commande Champ:') + '\nSyntaxe: champ <champion>\nRenvois les infos du champion'));                                         //-------------
@@ -163,9 +158,51 @@ async function runes(arg, lane) {
             if (!ru[0]) {
                 console.log(col.red.bold('Champion non reconnu'));
                 return;
-                redemarrer();
             }
-            $
+            const data = [
+                [ru[0], ru[5], adap[0]],
+                [tu[0], tu[3], adap[1]],
+                [tu[1], tu[4], adap[2]],
+                [tu[2], 'Rien', 'Rien']
+            ];
+            console.log(table(data));
+        })
+        .catch(err => {
+            console.log(col.red.bold('Champion non reconnu'))
+        })
+    await delay(3000);
+    redemarrer();
+}
+async function build(arg, lane) {
+    var url = `https://www.leagueofgraphs.com/fr/champions/builds/${arg}/${lignelog(lane)}`
+    axios.get(url)
+        .then(res => {
+            let html = res.data;
+            const $ = load(html);
+            let start = [];
+            let princ = [];
+            let fin = [];
+            let i;
+            $('img').each(function (index, element) {
+                if ($(element).parent().parent().parent().children().first().text().includes('Objects de départs')) {
+                    start.push(' ' + $(element).attr('alt'));
+                } else if ($(element).parent().parent().parent().children().first().text().includes('Bottes')) {
+                    i = $(element).attr('alt');
+                } else if ($(element).parent().parent().parent().children().first().text().includes('Objets principaux')) {
+                    princ.push(' ' + $(element).attr('alt'));
+                } else if ($(element).parent().parent().parent().children().first().text().includes('Objects de fin')) {
+                    fin.push(' ' + $(element).attr('alt'));
+                }
+            })
+            if (!start[0]) {
+                console.log(col.red.bold('Champion non reconnu'));
+                return;
+            }
+            const data = [
+                ['Objets de départ:', 'Objets principaux:','Objets de fin:'],
+                [start.join('\n'), princ.join('\n') + '\n' + i, fin.join('\n')]
+            ];
+            console.log(table(data));
         })
         .catch(err => {
             console.log(col.red.bold('Champion non reconnu'))
@@ -174,9 +211,6 @@ async function runes(arg, lane) {
     redemarrer();
 }
 async function matchup(arg, oppos) {
-    console.log('help')
-}
-async function start(arg, lane) {
     console.log('help')
 }
 async function champion(arg) {
@@ -224,6 +258,26 @@ function ligneop(lane) {
             break;
         case 'mid':
             return 'mid'
+            break;
+        case 'jgl':
+            return 'jungle'
+            break;
+    }
+}
+
+function lignelog(lane) {
+    switch (lane) {
+        case 'sup':
+            return 'support'
+            break;
+        case 'top':
+            return 'top'
+            break;
+        case 'adc':
+            return 'adc'
+            break;
+        case 'mid':
+            return 'middle'
             break;
         case 'jgl':
             return 'jungle'
