@@ -1,1 +1,2 @@
 commande stats
+commande info utilitaire (version du logiciel etc)
