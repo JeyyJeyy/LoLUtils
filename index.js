@@ -1,15 +1,18 @@
 //Librairies
-const axios = require('axios');
-const { load } = require('cheerio');
-const col = require('cli-color');
-const { table } = require('table');
-const inp = require('readline').createInterface({
+import axios from 'axios';
+import { load } from 'cheerio';
+import col from 'cli-color';
+import box from 'boxen';
+import { table } from 'table';
+import readline from 'readline';
+const inp = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
 //Debut du programme
 console.clear();
+console.log(box('unicorn', {padding: 1}));
 console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
 redemarrer();
 
@@ -67,6 +70,9 @@ function redemarrer() {
             case 'skill':
                 skill(arg, lane);
                 break;
+            case 'infos':
+                infos();
+                break;
         }
     });
 }
@@ -112,7 +118,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<clear>: effacer la console\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
+        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<clear>: effacer la console\n<infos>: informations sur l\'app\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
     } else {
         switch (arg) {
             case 'count':
@@ -122,22 +128,25 @@ async function help(arg) {
                 console.log(col.bold(col.underline('Commande Help:') + '\nSyntaxe: help [commande]\nRenvois les différentes commandes'));
                 break;
             case 'runes':
-                console.log(col.bold(col.underline('Commande Runes:') + '\nSyntaxe: runes <champion> <lane>\nRenvois les runes du champion\nLanes: top, jgl, mid, adc, sup'));  
+                console.log(col.bold(col.underline('Commande Runes:') + '\nSyntaxe: runes <champion> <lane>\nRenvois les runes du champion\nLanes: top, jgl, mid, adc, sup'));
                 break;
             case 'match':
                 console.log(col.bold(col.underline('Commande Match:') + '\nSyntaxe: match <champion> <opposant>\nRenvois les stats du matchup'));                               //-----------
                 break;
             case 'build':
-                console.log(col.bold(col.underline('Commande Build:') + '\nSyntaxe: build <champion> <lane>\nRenvois le build de la game du champion\nLanes: top, jgl, mid, adc, sup'));  
+                console.log(col.bold(col.underline('Commande Build:') + '\nSyntaxe: build <champion> <lane>\nRenvois le build de la game du champion\nLanes: top, jgl, mid, adc, sup'));
                 break;
             case 'champ':
                 console.log(col.bold(col.underline('Commande Champ:') + '\nSyntaxe: champ <champion>\nRenvois les infos du champion'));                                         //-------------
                 break;
             case 'clear':
-                console.log(col.bold(col.underline('Commande Clear:') + '\nSyntaxe: clear\nEfface la console'));                                         //-------------
+                console.log(col.bold(col.underline('Commande Clear:') + '\nSyntaxe: clear\nEfface la console'));
                 break;
             case 'skill':
-                console.log(col.bold(col.underline('Commande Skill:') + '\nSyntaxe: skill <champion> <lane>\nRenvois l\'ordre des spells à prendre\nLanes: top, jgl, mid, adc, sup'));  
+                console.log(col.bold(col.underline('Commande Skill:') + '\nSyntaxe: skill <champion> <lane>\nRenvois l\'ordre des spells à prendre\nLanes: top, jgl, mid, adc, sup'));
+                break;
+            case 'infos':
+                console.log(col.bold(col.underline('Commande Infos:') + '\nSyntaxe: infos\nInformations sur l\'app'));
                 break;
         }
     }
@@ -246,7 +255,7 @@ async function skill(arg, lane) {
             let list = [];
             $('img').each(function (index, element) {
                 if ($(element).parent().parent().parent().attr('class') == 'css-1p2lczn e80y3m3') {
-                    prio.push($(element).attr('alt')+' ('+$(element).parent().children().last().text()+')');
+                    prio.push($(element).attr('alt') + ' (' + $(element).parent().children().last().text() + ')');
                 }
             })
             $('strong').each(function (index, element) {
@@ -275,6 +284,11 @@ async function matchup(arg, oppos) {
 }
 async function champion(arg) {
     console.log('help')
+}
+async function infos() {
+    console.log(boxen('unicorn', {padding: 1}));
+    await delay(3000);
+    redemarrer();
 }
 
 function delay(time) {
