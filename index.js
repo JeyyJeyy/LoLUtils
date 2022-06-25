@@ -288,7 +288,7 @@ async function champion(arg) {
     console.log('help')
 }
 async function infos() {
-    console.log(box('Nom: '+pack.name+'\nVersion: v'+pack.version+'\nAuteur: '+pack.author+'\nDescription: '+pack.description, {title: 'Informations'}));
+    console.log(box('Nom: '+pack.name+'\nVersion: v'+pack.version+'\nAuteur: '+pack.author+'\nAperçu: '+pack.description, {title: 'Informations'}));
     await delay(3000);
     redemarrer();
 }
