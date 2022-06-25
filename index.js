@@ -13,6 +13,26 @@ console.clear();
 console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
 redemarrer();
 
+//TYPES DE DEGATS DU CHAMPION
+/*let list = [];
+let nbb = 26;
+let nbr = 19;
+let nbg = 55;
+let barb = parseFloat(nbb/100 * 20);
+let barr = parseFloat(nbr/100 * 20);
+let barg = parseFloat(nbg/100 * 20);
+for(var i = 0; i <= barr; i++){
+    list.push(col.red('█'));
+}
+for(var i = 0; i <= barb; i++){
+    list.push(col.cyan('█'));
+}
+for(var i = 0; i <= barg; i++){
+    list.push(col.blackBright('█'));
+}
+console.log('['+list.join('')+']\n\n'+col.red('█')+' = Physique '+col.cyan('█')+' = Magique '+col.blackBright('█')+' = Brut ')*/
+
+
 //Fonction principale
 function redemarrer() {
     inp.question('>> ', name => {
@@ -43,6 +63,9 @@ function redemarrer() {
                 console.clear();
                 console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
                 redemarrer();
+                break;
+            case 'skill':
+                skill(arg, lane);
                 break;
         }
     });
@@ -89,7 +112,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<clear>: effacer la console\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
+        console.log(col.bold(col.underline.bold('Commandes disponibles:') + '\n<help>:  renvois cette page\n<clear>: effacer la console\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'));
     } else {
         switch (arg) {
             case 'count':
@@ -99,19 +122,22 @@ async function help(arg) {
                 console.log(col.bold(col.underline('Commande Help:') + '\nSyntaxe: help [commande]\nRenvois les différentes commandes'));
                 break;
             case 'runes':
-                console.log(col.bold(col.underline('Commande Runes:') + '\nSyntaxe: runes <champion> <lane>\nRenvois les runes du champion\nLanes: top, jgl, mid, adc, sup'));  //---------------
+                console.log(col.bold(col.underline('Commande Runes:') + '\nSyntaxe: runes <champion> <lane>\nRenvois les runes du champion\nLanes: top, jgl, mid, adc, sup'));  
                 break;
             case 'match':
                 console.log(col.bold(col.underline('Commande Match:') + '\nSyntaxe: match <champion> <opposant>\nRenvois les stats du matchup'));                               //-----------
                 break;
             case 'build':
-                console.log(col.bold(col.underline('Commande Build:') + '\nSyntaxe: build <champion> <lane>\nRenvois le build de la game du champion\nLanes: top, jgl, mid, adc, sup'));  //----------
+                console.log(col.bold(col.underline('Commande Build:') + '\nSyntaxe: build <champion> <lane>\nRenvois le build de la game du champion\nLanes: top, jgl, mid, adc, sup'));  
                 break;
             case 'champ':
                 console.log(col.bold(col.underline('Commande Champ:') + '\nSyntaxe: champ <champion>\nRenvois les infos du champion'));                                         //-------------
                 break;
             case 'clear':
                 console.log(col.bold(col.underline('Commande Clear:') + '\nSyntaxe: clear\nEfface la console'));                                         //-------------
+                break;
+            case 'skill':
+                console.log(col.bold(col.underline('Commande Skill:') + '\nSyntaxe: skill <champion> <lane>\nRenvois l\'ordre des spells à prendre\nLanes: top, jgl, mid, adc, sup'));  
                 break;
         }
     }
@@ -199,8 +225,42 @@ async function build(arg, lane) {
                 return;
             }
             const data = [
-                ['Objets de départ:', 'Objets principaux:','Objets de fin:'],
+                ['Objets de départ:', 'Objets principaux:', 'Objets de fin:'],
                 [start.join('\n'), princ.join('\n') + '\n' + i, fin.join('\n')]
+            ];
+            console.log(table(data));
+        })
+        .catch(err => {
+            console.log(col.red.bold('Champion non reconnu'))
+        })
+    await delay(3000);
+    redemarrer();
+}
+async function skill(arg, lane) {
+    var url = `https://www.op.gg/champions/${arg}/${ligneop(lane)}/build?hl=fr_FR`
+    axios.get(url)
+        .then(res => {
+            let html = res.data;
+            const $ = load(html);
+            let prio = [];
+            let list = [];
+            $('img').each(function (index, element) {
+                if ($(element).parent().parent().parent().attr('class') == 'css-1p2lczn e80y3m3') {
+                    prio.push($(element).attr('alt')+' ('+$(element).parent().children().last().text()+')');
+                }
+            })
+            $('strong').each(function (index, element) {
+                if ($(element).parent().attr('class') == 'css-vegv5g e80y3m6') {
+                    list.push($(element).text());
+                }
+            })
+            if (!prio[0]) {
+                console.log(col.red.bold('Champion non reconnu'));
+                return;
+            }
+            const data = [
+                ['Priorité des spells:', prio.join(' > ')],
+                ['Ordre des spells:', list.join(', ')]
             ];
             console.log(table(data));
         })
