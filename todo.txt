@@ -1,7 +1,4 @@
 commande stats
-commande info utilitaire (version du logiciel etc)
-
-boxen pour types de degats
 
 lancement afficher lolutils avec gradient et figlet
 

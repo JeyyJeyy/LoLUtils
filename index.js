@@ -4,6 +4,9 @@ import { load } from 'cheerio';
 import col from 'cli-color';
 import box from 'boxen';
 import { table } from 'table';
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const pack = require("./package.json");
 import readline from 'readline';
 const inp = readline.createInterface({
     input: process.stdin,
@@ -12,7 +15,6 @@ const inp = readline.createInterface({
 
 //Debut du programme
 console.clear();
-console.log(box('unicorn', {padding: 1}));
 console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
 redemarrer();
 
@@ -21,9 +23,9 @@ redemarrer();
 let nbb = 26;
 let nbr = 19;
 let nbg = 55;
-let barb = parseFloat(nbb/100 * 20);
-let barr = parseFloat(nbr/100 * 20);
-let barg = parseFloat(nbg/100 * 20);
+let barb = parseFloat(nbb/100 * 40);
+let barr = parseFloat(nbr/100 * 40);
+let barg = parseFloat(nbg/100 * 40);
 for(var i = 0; i <= barr; i++){
     list.push(col.red('█'));
 }
@@ -33,7 +35,7 @@ for(var i = 0; i <= barb; i++){
 for(var i = 0; i <= barg; i++){
     list.push(col.blackBright('█'));
 }
-console.log('['+list.join('')+']\n\n'+col.red('█')+' = Physique '+col.cyan('█')+' = Magique '+col.blackBright('█')+' = Brut ')*/
+console.log(box('['+list.join('')+']\n\n'+col.red('█')+' = Physique '+col.cyan('█')+' = Magique '+col.blackBright('█')+' = Brut ', {title: 'Types de dégats'}))*/
 
 
 //Fonction principale
@@ -286,7 +288,7 @@ async function champion(arg) {
     console.log('help')
 }
 async function infos() {
-    console.log(boxen('unicorn', {padding: 1}));
+    console.log(box('Nom: '+pack.name+'\nVersion: v'+pack.version+'\nAuteur: '+pack.author+'\nDescription: '+pack.description, {title: 'Informations'}));
     await delay(3000);
     redemarrer();
 }
