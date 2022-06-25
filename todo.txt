@@ -1,3 +1,1 @@
 commande stats
-
-loading avant table (suppr qd table)
