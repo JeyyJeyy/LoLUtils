@@ -3,7 +3,6 @@ commande stats
 lancement afficher lolutils avec gradient et figlet
 
 commande contrer champ (tips contre + powerspike (mobalytic))
-ajouter mauvais counter a counter
 ajouter couleur commandes
 
 ajouter boxen help ? (+voir autres commandes)

@@ -85,31 +85,41 @@ async function contre(arg, lane) {
         .then(res => {
             const data = [];
             let nam;
-            let tabb;
+            let nam2;
             let html = res.data;
             const $ = load(html);
             if (!$('.b')[0]) {
                 console.log(col.red.bold('Champion non reconnu'))
             } else {
                 let i = 0;
-                let ru = [];
-                let wr = [];
-                let pt = [];
+                let ruW = [];
+                let wrW = [];
+                let ptW = [];
+                let ruL = [];
+                let wrL = [];
+                let ptL = [];
                 $('img').each(function (i, element) {
                     if ($(element).attr('alt') == "Counter Stats for " && $(element).parent().parent().parent().parent().parent().parent().children().first().text().includes(ligne(lane))) {
-                        ru.push($(element).attr('src'));
-                        wr.push($(element).parent().parent().next().next().children().text())
-                        pt.push($(element).parent().parent().next().children().next().find('label').text())
+                        if ($(element).parent().parent().parent().parent().parent().children().first().children().text().includes('Best Picks')) {
+                            ruW.push($(element).attr('src'));
+                            wrW.push($(element).parent().parent().next().next().children().text())
+                            ptW.push($(element).parent().parent().next().children().next().find('label').text())
+                        } else if ($(element).parent().parent().parent().parent().parent().children().first().children().text().includes('Worst Picks')) {
+                            ruL.push($(element).attr('src'));
+                            wrL.push($(element).parent().parent().next().next().children().text())
+                            ptL.push($(element).parent().parent().next().children().next().find('label').text())
+                        }
                     }
                 })
-                if (!ru[i]) {
+                if (!ruW[i]) {
                     console.log(col.red.bold('Champion non reconnu'));
                     return;
                 }
-                data.push(['Counter', 'WR', 'Score /10'])
+                data.push(['Meilleurs', 'WR', '/10', 'Pires', 'WR', '/10'])
                 while (i <= 11) {
-                    nam = ru[i].slice(48, -8);
-                    data.push([caps(nam), wr[i], pt[i].slice(0, -1)])
+                    nam = ruW[i].slice(48, -8);
+                    nam2 = ruL[i].slice(48, -8);
+                    data.push([caps(nam), wrW[i], ptW[i].slice(0, -1), caps(nam2), wrL[i], ptL[i].slice(0, -1)])
                     i++
                 }
                 console.log(table(data));
@@ -288,7 +298,7 @@ async function champion(arg) {
     console.log('help')
 }
 async function infos() {
-    console.log(box('Nom: '+pack.name+'\nVersion: v'+pack.version+'\nAuteur: '+pack.author+'\nAperçu: '+pack.description, {title: 'Informations'}));
+    console.log(box('Nom: ' + pack.name + '\nVersion: v' + pack.version + '\nAuteur: ' + pack.author + '\nAperçu: ' + pack.description, { title: 'Informations' }));
     await delay(3000);
     redemarrer();
 }
