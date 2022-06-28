@@ -7,6 +7,8 @@ import { table } from 'table';
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const pack = require("./package.json");
+const gradient = require('gradient-string');
+const figlet = require('figlet');
 import readline from 'readline';
 const inp = readline.createInterface({
     input: process.stdin,
@@ -14,9 +16,26 @@ const inp = readline.createInterface({
 });
 
 //Debut du programme
-console.clear();
-console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez <help> pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
-redemarrer();
+(async () => {
+    console.clear();
+    figlet.text('LoL Utils', {
+        font: 'Standard',
+        horizontalLayout: 'default',
+        verticalLayout: 'default',
+        width: undefined,
+        whitespaceBreak: true
+    }, function (err, data) {
+        if (err) {
+            console.log(col.red('Erreur au lancement...'));
+            return;
+        }
+        console.log(gradient('orange', 'red')(data) + col.red('\n Simplifier la sélection des champions\n\tUn outil de @JeyyJeyy'));
+    });
+    await delay(3000);
+    console.clear();
+    console.log('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez ' + col.redBright('<help>') + ' pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom');
+    redemarrer();
+})();
 
 //TYPES DE DEGATS DU CHAMPION
 /*let list = [];
@@ -130,7 +149,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(box(col.bold('<help>:  renvois cette page\n<clear>: effacer la console\n<infos>: informations sur l\'app\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\n\nhelp <commande>: aide sur la commande donnée'), { title: col.bold('Commandes disponibles') }));
+        console.log(box(col.bold('<help>:  renvois cette page\n<clear>: effacer la console\n<infos>: informations sur l\'app\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\n\nhelp <commande>: aide sur la commande donnée\n- Selon les commandes vous aurez à supprimer \nles espaces ou à les remplacer par des tirets'), { title: col.bold('Commandes disponibles') }));
     } else {
         switch (arg) {
             case 'count':
