@@ -16,7 +16,7 @@
      <img alt="NodeJS" src="https://img.shields.io/badge/node.js-v16.14.2-green">
   </a>
   <a>
-     <img src="https://img.shields.io/badge/Projet-v1.1.2-blue" alt="version">
+     <img src="https://img.shields.io/badge/Projet-v1.2.4-blue" alt="version">
   </a>
 </p>
 
