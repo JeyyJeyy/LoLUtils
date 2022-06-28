@@ -130,35 +130,35 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(box(col.bold('Commandes disponibles'), { title: col.bold('<help>:  renvois cette page\n<clear>: effacer la console\n<infos>: informations sur l\'app\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée') }));
+        console.log(box(col.bold('<help>:  renvois cette page\n<clear>: effacer la console\n<infos>: informations sur l\'app\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'), { title: col.bold('Commandes disponibles') }));
     } else {
         switch (arg) {
             case 'count':
-                console.log(box(col.bold('Commande Counter'), { title: col.bold('Syntaxe: count <champion> <lane>\nRenvois les counters du champion\nLanes: top, jgl, mid, adc, sup') }));
+                console.log(box(col.bold('Syntaxe: count <champion> <lane>\nRenvois les counters du champion\nLanes: top, jgl, mid, adc, sup'), { title: col.bold('Commande Counter') }));
                 break;
             case 'help':
-                console.log(box(col.bold('Commande Help'), { title: col.bold('Syntaxe: help [commande]\nRenvois les différentes commandes') }));
+                console.log(box(col.bold('Syntaxe: help [commande]\nRenvois les différentes commandes'), { title: col.bold('Commande Help') }));
                 break;
             case 'runes':
-                console.log(box(col.bold('Commande Runes'), { title: col.bold('Syntaxe: runes <champion> <lane>\nRenvois les runes du champion\nLanes: top, jgl, mid, adc, sup') }));
+                console.log(box(col.bold('Syntaxe: runes <champion> <lane>\nRenvois les runes du champion\nLanes: top, jgl, mid, adc, sup'), { title: col.bold('Commande Runes') }));
                 break;
             case 'match':
-                console.log(box(col.bold('Commande Match'), { title: col.bold('Syntaxe: match <champion> <opposant>\nRenvois les stats du matchup') })); //-----
+                console.log(box(col.bold('Syntaxe: match <champion> <opposant>\nRenvois les stats du matchup'), { title: col.bold('Commande MatchUp') })); //-----
                 break;
             case 'build':
-                console.log(box(col.bold('Commande Build'), { title: col.bold('Syntaxe: build <champion> <lane>\nRenvois le build de la game du champion\nLanes: top, jgl, mid, adc, sup') }));
+                console.log(box(col.bold('Syntaxe: build <champion> <lane>\nRenvois le build de la game du champion\nLanes: top, jgl, mid, adc, sup'), { title: col.bold('Commande Build') }));
                 break;
             case 'champ':
-                console.log(box(col.bold('Commande Champ'), { title: col.bold('Syntaxe: champ <champion>\nRenvois les infos du champion') })); //-----
+                console.log(box(col.bold('Syntaxe: champ <champion>\nRenvois les infos du champion'), { title: col.bold('Commande Champions') })); //-----
                 break;
             case 'clear':
-                console.log(box(col.bold('Commande Clear'), { title: col.bold('Syntaxe: clear\nEfface la console') }));
+                console.log(box(col.bold('Syntaxe: clear\nEfface la console'), { title: col.bold('Commande Clear') }));
                 break;
             case 'skill':
-                console.log(box(col.bold('Commande Skill'), { title: col.bold('Syntaxe: skill <champion> <lane>\nRenvois l\'ordre des spells à prendre\nLanes: top, jgl, mid, adc, sup') }));
+                console.log(box(col.bold('Syntaxe: skill <champion> <lane>\nRenvois l\'ordre des spells à prendre\nLanes: top, jgl, mid, adc, sup'), { title: col.bold('Commande Skill') }));
                 break;
             case 'infos':
-                console.log(box(col.bold('Commande Infos'), { title: col.bold('Syntaxe: infos\nInformations sur l\'app') }));
+                console.log(box(col.bold('Syntaxe: infos\nInformations sur l\'app'), { title: col.bold('Commande Informations') }));
                 break;
         }
     }
