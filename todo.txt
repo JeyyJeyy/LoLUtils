@@ -7,5 +7,3 @@ ajouter couleur commandes
 
 ajouter boxen help ? (+voir autres commandes)
 regarder ou ajouter couleurs
-
-pb runes + skill

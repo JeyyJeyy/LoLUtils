@@ -285,7 +285,9 @@ async function skill(arg, lane) {
             let prio = [];
             let list = [];
             $('img').each(function (index, element) {
-                if ($(element).parent().parent().parent().attr('class') == 'css-1p2lczn e80y3m3') {
+                let clas;
+                try {clas = $(element).parent().parent().parent().attr('class').split(' ')[1]}catch{};
+                if (clas == 'e80y3m3') {
                     prio.push($(element).attr('alt') + ' (' + $(element).parent().children().last().text() + ')');
                 }
             })
@@ -294,10 +296,10 @@ async function skill(arg, lane) {
                     list.push($(element).text());
                 }
             })
-            if (!prio[0]) {
+            /*if (!prio[0]) {
                 console.log(col.red.bold('Champion non reconnu'));
                 return;
-            }
+            }*/
             const data = [
                 ['Priorité des spells:', prio.join(' > ')],
                 ['Ordre des spells:', list.join(', ')]
