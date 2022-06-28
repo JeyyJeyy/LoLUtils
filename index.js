@@ -130,7 +130,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(box(col.bold('<help>:  renvois cette page\n<clear>: effacer la console\n<infos>: informations sur l\'app\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\nhelp <commande>: aide sur la commande donnée'), { title: col.bold('Commandes disponibles') }));
+        console.log(box(col.bold('<help>:  renvois cette page\n<clear>: effacer la console\n<infos>: informations sur l\'app\n<skill>: renvois l\'ordre des spells à prendre\n<count>: renvois les counters du champion\n<champ>: renvois les infos du champion\n<build>: renvois le build de la game du champion\n<match>: renvois les stats du matchup\n<runes>: renvois les runes du champion\n\nhelp <commande>: aide sur la commande donnée'), { title: col.bold('Commandes disponibles') }));
     } else {
         switch (arg) {
             case 'count':
