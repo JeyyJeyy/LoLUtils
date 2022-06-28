@@ -193,23 +193,19 @@ async function runes(arg, lane) {
             let ru = [];
             let tu = [];
             let adap = [];
-            let runes1 = $('.css-1a27uut.e1jxk9el2').children().next();
-            let runes2 = runes1.next().next();
-            let runes3 = runes1.last().children().next();
             $('img').each(function (index, element) {
                 if (!$(element).parent().parent().attr('class')) return;
+                let clas;
+                try {clas = $(element).attr('class').split(' ')[1]}catch{};
                 if ($(element).parent().parent().attr('class').includes('e1o8f101') && !$(element).parent().parent().attr('class').includes('css-6l0g7v')) {
                     tu.push($(element).attr('alt'));
-                }
-            })
-            runes3.find('img').each(function (index, element) {
-                if ($(element).attr('class').includes('css-anaetp')) {
+                }else if(clas == 'e1gtrici1' && !$(element).attr('src').includes('grayscale')){
                     if ($(element).attr('src').includes('5008')) {
                         adap.push("Force adaptative");
                     } else if ($(element).attr('src').includes('5005')) {
                         adap.push("Vitesse d\'attaque");
                     } else if ($(element).attr('src').includes('5007')) {
-                        adap.push("Accélération de compétences");
+                        adap.push("Accélération");
                     } else if ($(element).attr('src').includes('5002')) {
                         adap.push("Armure");
                     } else if ($(element).attr('src').includes('5003')) {
@@ -219,24 +215,28 @@ async function runes(arg, lane) {
                     }
                 }
             })
-            ru[0] = runes1.children().next().next().children().children().children().attr('alt');
-            ru[5] = runes2.children().next().children().children().children().attr('alt');
-            if (!ru[0]) {
+            $('h5').each(function (index, element) {
+                if ($(element).attr('class').includes('e1o8f100')) {
+                    ru.push($(element).text());
+                }
+            })
+            if (!tu[0]) {
                 console.log(col.red.bold('Champion non reconnu'));
                 return;
             }
             const data = [
-                [ru[0], ru[5], adap[0]],
-                [tu[0], tu[3], adap[1]],
-                [tu[1], tu[4], adap[2]],
-                [tu[2], 'Rien', 'Rien']
+                [ru[0], ru[1], 'Runes Stats'],
+                [tu[0], tu[4], adap[0]],
+                [tu[1], tu[5], adap[1]],
+                [tu[2], 'Rien', adap[2]],
+                [tu[3], 'Rien', 'Rien']
             ];
             console.log(table(data));
         })
         .catch(err => {
             console.log(col.red.bold('Champion non reconnu'))
         })
-    await delay(3000);
+    await delay(4000);
     redemarrer();
 }
 async function build(arg, lane) {
