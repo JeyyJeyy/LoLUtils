@@ -7,3 +7,5 @@ ajouter couleur commandes
 
 ajouter boxen help ? (+voir autres commandes)
 regarder ou ajouter couleurs
+
+nexe -i "index.js" -t x64-14.15.3 --ico icon.ico
