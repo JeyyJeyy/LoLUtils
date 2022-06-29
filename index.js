@@ -10,7 +10,6 @@ const pack = require("./package.json");
 const gradient = require('gradient-string');
 const figlet = require('figlet');
 import readline from 'readline';
-import { isBoxedPrimitive } from 'util/types';
 const inp = readline.createInterface({
     input: process.stdin,
     output: process.stdout
