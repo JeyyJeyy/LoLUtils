@@ -3,4 +3,4 @@ commande contrer champ (tips contre + powerspike (mobalytic))
 regarder ou ajouter couleurs
 cd C:\Users\jerome\Desktop\LoLUtils\output
 
-couleurs dans help commandes
+couleurs dans help commandes et infos

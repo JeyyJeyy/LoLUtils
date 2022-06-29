@@ -30,7 +30,7 @@ const inp = readline.createInterface({
             console.log(col.red('Erreur au lancement...'));
             return;
         }
-        console.log(gradient('orange', 'red')(data) + col.red('\n Simplifier la sélection des champions\n\tUn outil de @JeyyJeyy'));
+        console.log(gradient('yellow', 'red')(data) + col.red('\n Simplifier la sélection des champions\n\tUn outil de @JeyyJeyy'));
     });
     await delay(2000);
     console.clear();
@@ -221,8 +221,8 @@ async function runes(arg, lane) {
                     ru.push($(element).text());
                 }
             })
-            if (!tu[0]) {
-                console.log(col.red.bold('Champion non reconnu'));
+            if (!ru[0]) {
+                console.log(col.red.bold('Champion non reconnu ou erreur d\'API'));
                 return;
             }
             const data = [
@@ -266,8 +266,8 @@ async function build(arg, lane) {
                 return;
             }
             const data = [
-                ['Objets de départ:', 'Objets principaux:', 'Objets de fin:'],
-                [start.join('\n'), princ.join('\n') + '\n' + i, fin.join('\n')]
+                [col.redBright('Objets de départ:'), col.redBright('Objets principaux:'), col.redBright('Objets de fin:')],
+                [start.join('\n'), princ.join('\n') + '\n ' + i, fin.join('\n')]
             ];
             console.log(table(data));
         })
@@ -298,12 +298,12 @@ async function skill(arg, lane) {
                 }
             })
             if (!prio[0]) {
-                console.log(col.red.bold('Champion non reconnu'));
+                console.log(col.red.bold('Champion non reconnu ou erreur d\'API'));
                 return;
             }
             const data = [
-                ['Priorité des spells:', prio.join(' > ')],
-                ['Ordre des spells:', list.join(', ')]
+                [col.redBright('Priorité des spells:'), prio.join(' > ')],
+                [col.redBright('Ordre des spells:'), list.join(', ')]
             ];
             console.log(table(data));
         })
