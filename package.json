@@ -1,6 +1,9 @@
 {
   "name": "lolutils",
   "version": "1.2.4",
+  "bin": {
+    "myapp": "./index.js"
+  },
   "description": "Aide à la sélection des champions",
   "main": "index.js",
   "type": "module",

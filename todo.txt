@@ -9,3 +9,5 @@ ajouter boxen help ? (+voir autres commandes)
 regarder ou ajouter couleurs
 
 nexe -i "index.js" -t x64-14.15.3 --ico icon.ico
+cd C:\Users\jerome\Desktop\LoLUtils\output
+C:\Users\jerome\Desktop\LoLUtils\LoLUtils.exe
