@@ -10,6 +10,7 @@ const pack = require("./package.json");
 const gradient = require('gradient-string');
 const figlet = require('figlet');
 import readline from 'readline';
+import { isBoxedPrimitive } from 'util/types';
 const inp = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -138,7 +139,7 @@ async function contre(arg, lane) {
                 while (i <= 11) {
                     nam = ruW[i].slice(48, -8);
                     nam2 = ruL[i].slice(48, -8);
-                    data.push([caps(nam), wrW[i], ptW[i].slice(0, -1), caps(nam2), wrL[i], ptL[i].slice(0, -1)])
+                    data.push([caps(nam), bwr(wrW[i]), bpt(ptW[i]), caps(nam2), bwr(wrL[i]), bpt(ptL[i])])
                     i++
                 }
                 console.log(table(data));
@@ -296,10 +297,10 @@ async function skill(arg, lane) {
                     list.push($(element).text());
                 }
             })
-            /*if (!prio[0]) {
+            if (!prio[0]) {
                 console.log(col.red.bold('Champion non reconnu'));
                 return;
-            }*/
+            }
             const data = [
                 ['Priorité des spells:', prio.join(' > ')],
                 ['Ordre des spells:', list.join(', ')]
@@ -389,5 +390,25 @@ function lignelog(lane) {
         case 'jgl':
             return 'jungle'
             break;
+    }
+}
+
+function bwr(args){
+    let arg = args.slice(0, -1);
+    if(arg >= 51){
+        return col.greenBright(arg+'%');
+    }else if(arg <= 51){
+        return col.redBright(arg+'%');
+    }else if(arg == 50){
+        return arg+'%';
+    }
+}
+function bpt(arg){
+    if(arg >= 6){
+        return col.greenBright(arg);
+    }else if(arg < 5){
+        return col.redBright(arg);
+    }else if(arg >= 5 && arg < 6){
+        return arg;
     }
 }
