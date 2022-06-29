@@ -225,11 +225,11 @@ async function runes(arg, lane) {
                 return;
             }
             const data = [
-                [ru[0], ru[1], 'Runes Stats'],
+                [col.redBright(ru[0]), col.redBright(ru[1]), col.redBright('Runes Stats')],
                 [tu[0], tu[4], adap[0]],
                 [tu[1], tu[5], adap[1]],
-                [tu[2], 'Rien', adap[2]],
-                [tu[3], 'Rien', 'Rien']
+                [tu[2], col.blackBright('Rien'), adap[2]],
+                [tu[3], col.blackBright('Rien'), col.blackBright('Rien')]
             ];
             console.log(table(data));
         })
