@@ -1,0 +1,3 @@
+v1.2.4
+22,5mb de ram au repos et 0% cpu
+-50mb de ram in use et 5% cpu
