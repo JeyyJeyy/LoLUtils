@@ -84,7 +84,7 @@ function redemarrer() {
                 break;
             case 'clear':
                 console.clear();
-                console.log(col.bold('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez ' + col.redBright('<help>') + ' pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
+                console.log(col.bold('Tapez ' + col.redBright('<help>') + ' pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom'));
                 redemarrer();
                 break;
             case 'skill':
@@ -93,12 +93,20 @@ function redemarrer() {
             case 'infos':
                 infos();
                 break;
+            default:
+                console.log(col.redBright('Commande invalide, tapez "help" pour de l\'aide.'));
         }
     });
 }
 
 //Commandes disponibles
 async function contre(arg, lane) {
+    if(!lane){
+        console.log(col.redBright('Commande invalide, indiquez la ligne du champion.'));
+        await delay(500);
+        redemarrer();
+        return;
+    }
     axios.get(`https://www.counterstats.net/league-of-legends/${arg}`)
         .then(res => {
             const data = [];
@@ -148,7 +156,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(box(col.bold(col.redBright(' <help>') + ' :  renvois cette page\n ' + col.redBright('<clear>') + ': effacer la console\n ' + col.redBright('<infos>') + ': informations sur l\'app\n ' + col.redBright('<skill>') + ': renvois l\'ordre des spells à prendre\n ' + col.redBright('<count>') + ': renvois les counters du champion\n ' + col.redBright('<champ>') + ': renvois les infos du champion\n ' + col.redBright('<build>') + ': renvois le build de la game du champion\n ' + col.redBright('<match>') + ': renvois les stats du matchup\n ' + col.redBright('<runes>') + ': renvois les runes du champion\n\nhelp <commande>: aide sur la commande donnée\nSelon les commandes vous aurez à supprimer les \nespaces ou à les remplacer par des tirets'), { title: col.bold('Commandes disponibles') }));
+        console.log(box(col.bold(col.redBright(' <help>') + ' :  renvois cette page\n ' + col.redBright('<clear>') + ': effacer la console\n ' + col.redBright('<infos>') + ': informations sur l\'app\n ' + col.redBright('<skill>') + ': renvois l\'ordre des spells à prendre\n ' + col.redBright('<count>') + ': renvois les counters du champion\n ' + col.redBright('<champ>') + ': renvois les infos du champion\n ' + col.redBright('<build>') + ': renvois le build de la game du champion\n ' + col.redBright('<match>') + ': renvois les stats du matchup\n ' + col.redBright('<runes>') + ': renvois les runes du champion\n\nhelp <commande>: aide sur la commande donnée\nFormat des lanes: top, jgl, mid, adc et sup\nSelon les commandes vous aurez à supprimer les \nespaces ou à les remplacer par des tirets'), { title: col.bold('Commandes disponibles') }));
     } else {
         switch (arg) {
             case 'count':
@@ -184,6 +192,12 @@ async function help(arg) {
     redemarrer();
 }
 async function runes(arg, lane) {
+    if(!lane){
+        console.log(col.redBright('Commande invalide, indiquez la ligne du champion.'));
+        await delay(500);
+        redemarrer();
+        return;
+    }
     var url = `https://www.op.gg/champions/${arg}/${ligneop(lane)}/build?hl=fr_FR`
     axios.get(url)
         .then(res => {
@@ -196,7 +210,7 @@ async function runes(arg, lane) {
                 if (!$(element).parent().parent().attr('class')) return;
                 let clas;
                 try {clas = $(element).attr('class').split(' ')[1]}catch{};
-                if ($(element).parent().parent().attr('class').includes('e1o8f101') && !$(element).parent().parent().attr('class').includes('css-6l0g7v')) {
+                if ($(element).parent().parent().attr('class').includes('e1o8f101') && !$(element).attr('src').includes('grayscale')) {
                     tu.push($(element).attr('alt'));
                 }else if(clas == 'e1gtrici1' && !$(element).attr('src').includes('grayscale')){
                     if ($(element).attr('src').includes('5008')) {
@@ -214,9 +228,11 @@ async function runes(arg, lane) {
                     }
                 }
             })
-            $('h5').each(function (index, element) {
-                if ($(element).attr('class').includes('e1o8f100')) {
-                    ru.push($(element).text());
+            $('span').each(function (index, element) {
+                if($(element).attr('class')){
+                    if ($(element).attr('class').includes('e1o8f100')) {
+                        ru.push($(element).text());
+                    }
                 }
             })
             if (!ru[0]) {
@@ -234,11 +250,18 @@ async function runes(arg, lane) {
         })
         .catch(err => {
             console.log(col.red.bold('Champion non reconnu'))
+            console.log(err)
         })
     await delay(4000);
     redemarrer();
 }
 async function build(arg, lane) {
+    if(!lane){
+        console.log(col.redBright('Commande invalide, indiquez la ligne du champion.'));
+        await delay(500);
+        redemarrer();
+        return;
+    }
     var url = `https://www.leagueofgraphs.com/fr/champions/builds/${arg}/${lignelog(lane)}`
     axios.get(url)
         .then(res => {
@@ -276,6 +299,12 @@ async function build(arg, lane) {
     redemarrer();
 }
 async function skill(arg, lane) {
+    if(!lane){
+        console.log(col.redBright('Commande invalide, indiquez la ligne du champion.'));
+        await delay(500);
+        redemarrer();
+        return;
+    }
     var url = `https://www.op.gg/champions/${arg}/${ligneop(lane)}/build?hl=fr_FR`
     axios.get(url)
         .then(res => {
@@ -300,8 +329,8 @@ async function skill(arg, lane) {
                 return;
             }
             const data = [
-                [col.redBright('Priorité des spells:'), prio.join(' > ')],
-                [col.redBright('Ordre des spells:'), list.join(', ')]
+                [col.redBright('Priorité:'), prio.join(' > ')],
+                [col.redBright('Ordre:'), list.join(', ')]
             ];
             console.log(table(data));
         })
@@ -312,10 +341,20 @@ async function skill(arg, lane) {
     redemarrer();
 }
 async function matchup(arg, oppos) {
+    if(!oppos){
+        console.log(col.redBright('Commande invalide, indiquez le champion opposant.'));
+        await delay(500);
+        redemarrer();
+        return;
+    }
     console.log('help')
+    await delay(500);
+    redemarrer();
 }
 async function champion(arg) {
     console.log('help')
+    await delay(500);
+    redemarrer();
 }
 async function infos() {
     console.log(box('Nom: ' + pack.name + '\nVersion: v' + pack.version + '\nAuteur: ' + pack.author + '\nAperçu: ' + pack.description, { title: 'Informations' }));
@@ -333,19 +372,19 @@ function caps(str) {
 
 function ligne(lane) {
     switch (lane) {
-        case 'sup':
+        case 'sup' || 'support':
             return 'Support'
             break;
         case 'top':
             return 'Top'
             break;
-        case 'adc':
+        case 'adc' || 'bottom' || 'bot':
             return 'Bottom'
             break;
         case 'mid':
             return 'Middle'
             break;
-        case 'jgl':
+        case 'jgl' || 'jungle':
             return 'Jungle'
             break;
     }
@@ -353,19 +392,19 @@ function ligne(lane) {
 
 function ligneop(lane) {
     switch (lane) {
-        case 'sup':
+        case 'sup' || 'support':
             return 'support'
             break;
         case 'top':
             return 'top'
             break;
-        case 'adc':
+        case 'adc' || 'bot' || 'bottom':
             return 'adc'
             break;
         case 'mid':
             return 'mid'
             break;
-        case 'jgl':
+        case 'jgl' || 'jungle':
             return 'jungle'
             break;
     }
