@@ -1,6 +1,6 @@
 {
   "name": "lolutils",
-  "version": "1.2.14",
+  "version": "1.4.10",
   "bin": {
     "myapp": "./index.js"
   },
