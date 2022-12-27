@@ -18,7 +18,7 @@ const inp = readline.createInterface({
 //Debut du programme
 (async () => {
     console.clear();
-    figlet.text('LoL Utils', {
+    figlet.text('LoLUtils v1', {
         font: 'Standard',
         horizontalLayout: 'default',
         verticalLayout: 'default',
@@ -29,11 +29,10 @@ const inp = readline.createInterface({
             console.log(col.red('Erreur au lancement...'));
             return;
         }
-        console.log(gradient('yellow', 'red')(data) + col.red('\n Simplifier la sélection des champions\n\tUn outil de @JeyyJeyy'));
+        console.log(gradient('yellow', 'red')(data) + col.red('\nSimplifier la sélection des champions @JeyyJeyy'));
     });
-    await delay(2000);
-    console.clear();
-    console.log('-=-=-=-=-=[ Bienvenue sur ' + col.red('LoL-Utils') + ' ]=-=-=-=-=-=\nUn outil qui facilite la sélection des champions\nTapez ' + col.redBright('<help>') + ' pour toutes les commandes possibles\nN\'insérez pas d\'espaces ni de tirets dans le nom');
+    await delay(500);
+    console.log('Tapez ' + col.redBright('<help>') + ' pour toutes les commandes possibles');
     redemarrer();
 })();
 
@@ -149,7 +148,7 @@ async function contre(arg, lane) {
 }
 async function help(arg) {
     if (!arg) {
-        console.log(box(col.bold(col.redBright(' <help>') + ' :  renvois cette page\n ' + col.redBright('<clear>') + ': effacer la console\n ' + col.redBright('<infos>') + ': informations sur l\'app\n ' + col.redBright('<skill>') + ': renvois l\'ordre des spells à prendre\n ' + col.redBright('<count>') + ': renvois les counters du champion\n ' + col.redBright('<champ>') + ': renvois les infos du champion\n ' + col.redBright('<build>') + ': renvois le build de la game du champion\n ' + col.redBright('<match>') + ': renvois les stats du matchup\n ' + col.redBright('<runes>') + ': renvois les runes du champion\n\nhelp <commande>: aide sur la commande donnée\n- Selon les commandes vous aurez à supprimer \nles espaces ou à les remplacer par des tirets'), { title: col.bold('Commandes disponibles') }));
+        console.log(box(col.bold(col.redBright(' <help>') + ' :  renvois cette page\n ' + col.redBright('<clear>') + ': effacer la console\n ' + col.redBright('<infos>') + ': informations sur l\'app\n ' + col.redBright('<skill>') + ': renvois l\'ordre des spells à prendre\n ' + col.redBright('<count>') + ': renvois les counters du champion\n ' + col.redBright('<champ>') + ': renvois les infos du champion\n ' + col.redBright('<build>') + ': renvois le build de la game du champion\n ' + col.redBright('<match>') + ': renvois les stats du matchup\n ' + col.redBright('<runes>') + ': renvois les runes du champion\n\nhelp <commande>: aide sur la commande donnée\nSelon les commandes vous aurez à supprimer les \nespaces ou à les remplacer par des tirets'), { title: col.bold('Commandes disponibles') }));
     } else {
         switch (arg) {
             case 'count':
