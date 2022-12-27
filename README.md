@@ -2,7 +2,7 @@
   <br>
   <a><img src="https://ddragon.leagueoflegends.com/cdn/img/champion/centered/Velkoz_11.jpg" alt="LoL-Utils - Utilitaire LoL"></a>
   <br>
-  LoL-Utils Un utilitaire LoL
+  LoL-Utils - Un utilitaire LoL
   <br>
 </h1>
 
